@@ -116,7 +116,8 @@ fun HomeScreenPreview(){
 
 @Composable
 fun SettingsScreen(navController : NavHostController){
-
+    var state by remember { mutableStateOf(true) }
+    val context = LocalContext.current
     Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -133,16 +134,44 @@ fun SettingsScreen(navController : NavHostController){
                 fontSize = 30.sp
         )
         Spacer(modifier = Modifier.height(15.dp))
-        val ipadress = ValidateIp()
+        val ipaddress = ValidateIp()
         Spacer(modifier = Modifier.height(15.dp))
         val port = ValidatePort()
         Spacer(modifier = Modifier.height(15.dp))
         val time = ValidTIme()
         Spacer(modifier = Modifier.height(15.dp))
-        val state = SettingsButton(ipadress,port,time)
-        GlobalVariables.ipadress = ipadress
-        GlobalVariables.port = port
-        GlobalVariables.time = time
+        Button(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                colors = ButtonColors(
+                        containerColor = colorResource(R.color.white_600),
+                        contentColor = colorResource(R.color.white_200),
+                        disabledContentColor = colorResource(R.color.white_200),
+                        disabledContainerColor = colorResource(R.color.white_550)
+                ),
+                shape = CutCornerShape(50),
+                enabled = true,
+                onClick = {
+                    if(ipaddress.isNotEmpty()&&port.isNotEmpty()&&time.isNotEmpty()){
+                        state = true
+                        GlobalVariables.ipaddress = ipaddress
+                        GlobalVariables.port = port
+                        GlobalVariables.time = time
+                        Toast.makeText(context,"Values correctly save",Toast.LENGTH_LONG).show()
+                    }else{
+                        state = false
+                        Toast.makeText(context,"Please fill values in the fields",Toast.LENGTH_LONG).show()
+                    }
+                }
+        ) {
+            Text(
+                    text = "Save",
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 16.sp
+            )
+        }
     }
 }
 
@@ -267,7 +296,7 @@ fun ValidateIp(): String {
 //}
 
 @Composable
-fun SettingsButton(ipaddr: String, port: String, time: String):Boolean{
+fun settingsButton(ipaddr: String, port: String, time: String):Boolean{
     var state by remember { mutableStateOf(false) }
     val context = LocalContext.current
     Button(
@@ -284,10 +313,14 @@ fun SettingsButton(ipaddr: String, port: String, time: String):Boolean{
             enabled = state,
             onClick = {
                     if(ipaddr.isEmpty()&&port.isEmpty()&&time.isEmpty()){
-                        state = false
+                        state = true
+                        GlobalVariables.ipaddress = ipaddr
+                        GlobalVariables.port = port
+                        GlobalVariables.time = time
+                        print("ipaddr : "+GlobalVariables.ipaddress+" Port : "+GlobalVariables.port+"\n")
                         Toast.makeText(context,"Please fill in the fields",Toast.LENGTH_LONG).show()
                     }else{
-                        state = true
+                        state = false
                         Toast.makeText(context,"Values correctly save",Toast.LENGTH_LONG).show()
                     }
             }

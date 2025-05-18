@@ -125,7 +125,7 @@ fun MainProject(modifier: Modifier = Modifier){
                         state = "Disconnect"
                     }else{
                         state = "Connected"
-//                        print("Ip : "+GlobalVariables.ipadress+ " Port : "+GlobalVariables.port+"\n")
+                        print("Ip : "+GlobalVariables.ipaddress+ " Port : "+GlobalVariables.port+"\n")
                     }
                 },
                 colors = TopAppBarColors(
